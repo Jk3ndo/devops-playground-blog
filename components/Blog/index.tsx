@@ -1,9 +1,19 @@
 import React from "react";
 import SectionHeader from "../Common/SectionHeader";
 import BlogItem from "./BlogItem";
-import BlogData from "./blogData";
+import { client } from "@/app/sanity/client";
+import type { Blog } from "@/types/blog";
+
+const BLOGS_QUERY = `*[
+  _type == "blog"
+  && defined(slug.current)
+]|order(publishedAt desc)[0...3]`;
+
+const options = { next: { revalidate: 30 } };
 
 const Blog = async () => {
+  const BlogData = await client.fetch<Blog[]>(BLOGS_QUERY, {}, options);
+
   return (
     <section className="py-20 lg:py-25 xl:py-30">
       <div className="mx-auto max-w-c-1315 px-4 md:px-8 xl:px-0">

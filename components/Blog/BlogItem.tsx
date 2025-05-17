@@ -2,10 +2,20 @@
 import { Blog } from "@/types/blog";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import imageUrlBuilder from "@sanity/image-url";
+import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
+import { client } from "@/app/sanity/client";
 import Link from "next/link";
 
+const { projectId, dataset } = client.config();
+const urlFor = (source: SanityImageSource) =>
+  projectId && dataset
+    ? imageUrlBuilder({ projectId, dataset }).image(source)
+    : null;
+
 const BlogItem = ({ blog }: { blog: Blog }) => {
-  const { mainImage, title, metadata } = blog;
+  const { mainImage, title, metadata, _id } = blog;
+  const blogImageUrl = mainImage ? urlFor(mainImage)?.url() : null;
 
   return (
     <>
@@ -27,13 +37,13 @@ const BlogItem = ({ blog }: { blog: Blog }) => {
         viewport={{ once: true }}
         className="animate_top rounded-lg bg-white p-4 pb-9 shadow-solid-8 dark:bg-blacksection"
       >
-        <Link href={`/blog/`} className="relative block aspect-368/239">
-          <Image src={mainImage} alt={title} fill />
+        <Link href={`/blog/blog-details?id=${_id}`} className="relative block aspect-368/239">
+          <Image src={blogImageUrl!} alt={title} fill />
         </Link>
 
         <div className="px-4">
           <h3 className="mb-3.5 mt-7.5 line-clamp-2 inline-block text-lg font-medium text-black duration-300 hover:text-primary dark:text-white dark:hover:text-primary xl:text-itemtitle2">
-            <Link href={`/blog/blog-details`}>
+            <Link href={`/blog/blog-details?id=${_id}`}>
               {`${title.slice(0, 40)}...`}
             </Link>
           </h3>

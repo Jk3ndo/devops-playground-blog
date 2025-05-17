@@ -7,11 +7,11 @@ export type Author = {
 };
 
 export type Blog = {
-  _id: string;
+  _id: string | number;
   title: string;
   slug?: any;
   metadata?: string;
-  body?: string;
+  body: any;
   mainImage?: any;
   author?: Author;
   tags?: string[];

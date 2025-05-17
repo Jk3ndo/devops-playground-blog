@@ -1,6 +1,14 @@
-import BlogData from "@/components/Blog/blogData";
 import BlogItem from "@/components/Blog/BlogItem";
 import { Metadata } from "next";
+import { client } from "@/app/sanity/client";
+import type { Blog } from "@/types/blog";
+
+const BLOGS_QUERY = `*[
+  _type == "blog"
+  && defined(slug.current)
+]|order(publishedAt desc)`;
+
+const options = { next: { revalidate: 30 } };
 
 export const metadata: Metadata = {
   title: "Our latest insights | DevOps Playground",
@@ -10,6 +18,7 @@ export const metadata: Metadata = {
 };
 
 const BlogPage = async () => {
+  const BlogData = await client.fetch<Blog[]>(BLOGS_QUERY, {}, options);
   return (
     <>
       {/* <!-- ===== Blog Grid Start ===== --> */}
