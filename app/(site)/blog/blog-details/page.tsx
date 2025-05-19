@@ -9,8 +9,7 @@ export const metadata: Metadata = {
     description: "This is Blog details page for Solid Pro",
   };
 
-const SingleBlogPage = async ({ searchParams }: { searchParams: { id?: string } }) => {
-  
+const SingleBlogPage = async ({ searchParams }: { searchParams: Promise<{ id?: string }> }) => {
   const { id } = await searchParams;
 
   const blog = await client.fetch(

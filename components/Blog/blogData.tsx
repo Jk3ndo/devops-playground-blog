@@ -1,6 +1,6 @@
-import { Blog } from "@/types/blog";
+// import { Blog } from "@/types/blog";
 
-const BlogData: Blog[] = [
+const BlogData: any[] = [
   {
     _id: 1,
     mainImage: "/images/blog/blog-01.png",
